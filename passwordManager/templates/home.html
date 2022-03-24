@@ -71,13 +71,13 @@
     <div class="modals-wrapper">
         <span id="close-modal" title="close"><i class="fa fa-times" aria-hidden="true"></i></span>
         <!--login modal-->
-        <div class="modal" id="login-modal">
+        <div class="modal" id="login-model">
             <form action="." role="form" method="POST">
                 {% csrf_token %}
                 <h2>Login</h2>
                 <input type="text" name="username" placeholder="username">
                 <input type="password" name="password" placeholder="password">
-                <input type="submit" value="login" name="login">
+                <input type="submit" value="login" name="login-model">
             </form>
         </div>
 
@@ -88,9 +88,12 @@
                 <h2>SignUp</h2>
                 <input type="text" name="username" placeholder="username">
                 <input type="email" name="email" placeholder="email">
+                <input type="text" name="mobileno" placeholder="mobileno">
+                
                 
                 <input type="password" name="password" placeholder="password">
                 <input type="password2" name="password2" placeholder="confirm password">
+
                 <input type="submit" value="register" name="signup-form">
             </form>
         </div>
