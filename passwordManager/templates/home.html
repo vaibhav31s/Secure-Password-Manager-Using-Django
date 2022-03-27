@@ -87,13 +87,10 @@
                 {% csrf_token %}
                 <h2>SignUp</h2>
                 <input type="text" name="username" placeholder="username">
-                <input type="email" name="email" placeholder="email">
-                <input type="text" name="mobileno" placeholder="mobileno">
-                
-                
+                <input type="email" name="email" placeholder="email">   
                 <input type="password" name="password" placeholder="password">
                 <input type="password2" name="password2" placeholder="confirm password">
-
+                <input type="text" name="phone" placeholder="phone">  
                 <input type="submit" value="register" name="signup-form">
             </form>
         </div>
@@ -106,7 +103,8 @@
                 {% csrf_token %}
                 <h2>Add new password</h2>
                 <input type="text" name="url" placeholder="url of website">
-                <input type="email" name="email" placeholder="email">      
+                <input type="email" name="email" placeholder="email">    
+                 
                 <input type="password" name="password" placeholder="password">
                 <input type="submit" value="save" name="add-password">
             </form>
@@ -120,7 +118,7 @@
         {% for password in passwords %}
         <div class="card">
             <div class="actions">&nbsp;Actions <i class="fa fa-arrow-down" aria-hidden="true"></i>
-                <a href="javascript:;" onclick="document.getElementById('delete-btn{{password.id}}').click();" class="action-item">Delete</a>
+                <a href="javascript:;" onclick="document.getElementById('delete-btn{{password.id}}').click();" class="action-item">Send Data</a>
                 <form hidden="true" action="." method="POST">
                     {% csrf_token %}
                     <input type="text" hidden="true" name="password-id" value="{{password.id}}">

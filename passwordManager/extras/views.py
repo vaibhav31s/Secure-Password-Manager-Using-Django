@@ -14,10 +14,11 @@ from mechanize import Browser
 import favicon
 from django.core.mail import send_mail
 from decouple import config
-from .models import Passwords
+from .models import Passwords,newUser
 fernet = Fernet(settings.KEY)
 br = Browser()
 br.set_handle_robots(False)
+
 
 def home(request):
     if request.method == "POST":
@@ -26,7 +27,7 @@ def home(request):
             email = request.POST.get("email")
             password = request.POST.get("password")
             password2 = request.POST.get("password2")
-            mobile = request.POST.get('mobileno')
+            mobile = request.POST.get('phone')
             #if password are not identical
             if password != password2:
                 msg = "Please make sure you're using the same password!"
@@ -43,12 +44,18 @@ def home(request):
                 messages.error(request, msg)
                 return HttpResponseRedirect(request.path)
             else:
+                
                 User.objects.create_user(username, email, password)
                 new_user = authenticate(request, username=username, password=password2)
+                
+                # newextendeduser = newUser(mobile=mobile)
+                
                 if new_user is not None:
                     login(request, new_user)
                     msg = f"{username}. Thanks for subscribing."
                     messages.success(request, msg)
+                    newextendeduser =newUser.objects.create(user =new_user,mobile=mobile)
+                    newextendeduser.save()
                     return HttpResponseRedirect(request.path)
         elif "logout" in request.POST:
             msg = f"{request.user}. You logged out."
@@ -99,6 +106,7 @@ def home(request):
                     msg= f"{request.user} Welcome Again My friend."
                     messages.success(request,msg)
                     return HttpResponseRedirect(request.path)
+
 
         elif "add-password" in request.POST:
             url = request.POST.get("url")
@@ -188,6 +196,7 @@ def home(request):
             #     [getEmail[0]['email']],
             #     fail_silently=False,
             # )
+            
             account_sid = config('account_sid')
             auth_token = config('auth_token')
             client = Client(account_sid, auth_token)
@@ -200,7 +209,8 @@ def home(request):
                             )
 
             print(message.sid)
-
+            msg =f"Message is Delivered Successful ly"
+            messages.success(request, msg)
 
         # elif "delete" in request.POST:
             

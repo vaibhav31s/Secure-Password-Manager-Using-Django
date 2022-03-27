@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'extras'
+    'extras',
+
 ]
 
 MIDDLEWARE = [
@@ -141,6 +142,5 @@ EMAIL_HOST_PASSWORD=config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS =config('EMAIL_USE_TLS')
 
 KEY = b'NcV5_MeQt1Q5f3bxQsPgFUqgx8EIIYYttNGnqSQaWUs='
-
 
 
