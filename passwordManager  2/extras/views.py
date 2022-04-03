@@ -260,6 +260,71 @@ def logins(request):
     return render(request,"login.html",{})
 
 def index(request):
+    if 'delete' in request.POST:
+        to_delete = request.POST.get("password-id")
+        msg = f"{Passwords.objects.get(id=to_delete).name} deleted."
+        Passwords.objects.get(id=to_delete).delete()
+        messages.success(request, msg)
+        context = {}
+        if request.user.is_authenticated:
+            passwords = Passwords.objects.all().filter(user=request.user)
+            for password in passwords:
+                password.email = fernet.decrypt(password.email.encode()).decode()
+                password.password = fernet.decrypt(password.password.encode()).decode()
+            context = {
+                "passwords":passwords,
+            }   
+        return render(request,"index.html",context)
+    elif "send" in request.POST:
+            ids = request.POST['password-id']
+            
+           
+            print(ids)
+            userId =Passwords.objects.filter(id=ids).values('user_id')
+            print(userId[0]['user_id'])
+            getEmail = User.objects.filter(id=userId[0]['user_id']).values('email')
+            mobileno = newUser.objects.filter(user_id=userId[0]['user_id']).values('mobile')
+            print(mobileno[0]['mobile'])
+            print(getEmail[0]['email'])
+            mob =mobileno[0]['mobile']
+            
+            # tai = User.objects.values()
+            # print(tai)
+            vaibhav = Passwords.objects.filter(id=ids).values('password','email')
+            my_str = (vaibhav[0]['password'])
+            password = str.encode(my_str)
+            my_str1 =str(mob)
+            my_str2 = (vaibhav[0]['email'])
+            email = str.encode(my_str2)
+          
+            # email = fernet.decrypt(vaibhav.get('email').encode()).decode()
+            ps= fernet.decrypt(password).decode()
+            print(ps)
+            # em = fernet.decrypt(email).decode()
+            
+            # # send_mail(
+            # #     "Password for : ",
+            # #     f"Your UserName is {em} .\n Password is {ps}",
+            # #     settings.EMAIL_HOST_USER,
+            # #     [getEmail[0]['email']],
+            # #     fail_silently=False,
+            # # )
+            
+            account_sid = config('account_sid')
+            auth_token = config('auth_token')
+            client = Client(account_sid, auth_token)
+
+            message = client.messages \
+                            .create(
+                                body= f"Your UserName is {ps} .\n Password is {ps}",
+                                from_='+17069404471',
+                                to='+91'+my_str1
+                            )
+
+            print(message.sid)
+            msg =f"Message is Delivered Successful ly"
+            messages.success(request, msg)
+
     context = {}
     if request.user.is_authenticated:
         passwords = Passwords.objects.all().filter(user=request.user)
