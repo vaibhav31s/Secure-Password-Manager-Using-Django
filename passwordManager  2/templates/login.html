@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+    <div
+      class="md:min-h-screen bg-gray-100 text-gray-800 antialiased px-4 py-6 flex md:flex-col justify-center sm:py-12">
+      <div class="md:flex md:flex-row">
+        <img src="{% static 'undraw_programming_re_kg9v.svg' %}"
+          class="fixed hidden lg:block inset-72 h-72 w-96 border-8 hover:scale-125 border-blue-900  ">
+        <div class="md:relative py-3 sm:max-w-xl mx-auto text-center inset-x-96 -inset-y-3">
+          <span class="text-2xl font-medium">Login</span>
+          <div class="modal" id="login-model">
+
+            <div class="h-2 bg-indigo-400 rounded-t-md"></div>
+            <div class="md:relative mr-34 bg-white shadow-md sm:rounded-lg text-left" id="login-model">
+              <form action="" role="form" method="POST">
+                {% csrf_token %}
+                <div class="py-14 px-16">
+
+                  <label class="block font-semibold">Username<label>
+                      <input type="text" name="username" placeholder="username"
+                        class=" border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-indigo-600 rounded-md">
+                      <label class="block mt-3 font-semibold">Password<label>
+                          <input type="password" name="password" placeholder="password"
+                            class=" border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-indigo-600 rounded-md">
+                          <div class="flex justify-center items-baseline">
+                            <input type="submit" value="Login" name="login-model"
+                              class="mt-4 bg-indigo-500 text-white py-2 px-6 rounded-lg hover:scale-125"></input>
+
+                          </div>
+                </div>
+              </form>
+              
+
+            </div>
+          </div>
+        </div>
+      </div>
+  </body>
+
+</html>
+{% endblock %}

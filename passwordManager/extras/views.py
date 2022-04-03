@@ -168,19 +168,23 @@ def home(request):
 
         elif "delete" in request.POST:
             ids = request.POST.get('password-id')
+
             print(ids)
             userId =Passwords.objects.filter(id=ids).values('user_id')
-            print(userId)
+            print(userId[0]['user_id'])
             getEmail = User.objects.filter(id=userId[0]['user_id']).values('email')
-
+            mobileno = newUser.objects.filter(user_id=userId[0]['user_id']).values('mobile')
+            print(mobileno[0]['mobile'])
             print(getEmail[0]['email'])
+            emal= getEmail[0]['email']
+            mob =mobileno[0]['mobile']
 
             # tai = User.objects.values()
             # print(tai)
             vaibhav = Passwords.objects.filter(id=ids).values('password','email')
             my_str = (vaibhav[0]['password'])
             password = str.encode(my_str)
-            
+            my_str1 =str(mob)
             my_str2 = (vaibhav[0]['email'])
             email = str.encode(my_str2)
           
@@ -189,13 +193,14 @@ def home(request):
             print(ps)
             em = fernet.decrypt(email).decode()
             print(em)
-            # send_mail(
-            #     "Password for : ",
-            #     f"Your UserName is {em} .\n Password is {ps}",
-            #     settings.EMAIL_HOST_USER,
-            #     [getEmail[0]['email']],
-            #     fail_silently=False,
-            # )
+            send_mail(
+                "Password for : ",
+                f"Your UserName is {em} .\n Password is {ps}",
+                settings.EMAIL_HOST_USER,
+                [emal],
+                fail_silently=False,
+            )
+            
             
             account_sid = config('account_sid')
             auth_token = config('auth_token')
@@ -205,7 +210,7 @@ def home(request):
                             .create(
                                 body= f"Your UserName is {em} .\n Password is {ps}",
                                 from_='+17069404471',
-                                to='+918805078063'
+                                to='+91'+my_str1
                             )
 
             print(message.sid)

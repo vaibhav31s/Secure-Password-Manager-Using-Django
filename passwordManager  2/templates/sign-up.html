@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+                <img src="{% static 'undraw_remotely_-2-j6y.svg'%}"
+                    class="fixed hidden lg:block inset-72 h-72 w-96 border-8 hover:scale-125 border-blue-900  ">
+            </div>
+        </div>
+        <form action="/signup" role="form" method="post">
+            {% csrf_token %}
+            <div
+                class="md:min-h-screen bg-gray-100 text-gray-800 antialiased px-4 py-6 flex flex-col justify-center sm:py-12">
+                <div class="md:relative py-3 sm:max-w-xl mx-auto text-center inset-x-96 -inset-y-3">
+                    <span class="text-2xl font-medium">Sign-Up</span>
+                    <div class="relative mr-34 bg-white shadow-md sm:rounded-lg text-left">
+                        <div class="h-2 bg-indigo-400 rounded-t-md"></div>
+                        <div class="py-14 px-16">
+                            <label class="block font-semibold">Username<label>
+                                    <input type="text" name="username" placeholder="username"
+                                        class=" border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-indigo-600 rounded-md">
+
+                                    <label class="block font-semibold">Email<label>
+                                            <input type="email" name="email" placeholder="Email"
+                                                class=" border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-indigo-600 rounded-md">
+
+                                            <label class="block font-semibold">Mobile Number<label>
+
+                                                    <input type="text" name="phone" placeholder="Mobile Number"
+                                                        class=" border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-indigo-600 rounded-md">
+
+                                                    <label class="block mt-3 font-semibold">Password<label>
+                                                            <input type="password" name="password" placeholder="Password"
+                                                                minlength="8"
+                                                                class=" border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-indigo-600 rounded-md">
+
+                                                            <label class="block mt-3 font-semibold">Confirm
+                                                                Password<label></label>
+                                                                <input type="text" name="password2" id
+                                                                    placeholder="Re-enter Password" minlength="8"
+                                                                    class=" border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-indigo-600 rounded-md">
+
+                                                                <div class="flex justify-between items-baseline">
+                                                                    <button type='submit' name="sign-up" class="mt-4 ml-24 bg-indigo-500 text-white
+                         py-2 px-6 rounded-lg hover:scale-125">Register</button>
+
+                                                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            </div>
+        </form>
+    </body>
+
+</html>
+
+{% endblock %}

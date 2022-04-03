@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>SecurePassword</title>
+    <!-- <link rel="stylesheet" href="{% static 'style.css' %}"> -->
+    <script src="{% static 'main.js' %}" defer></script>
+</head> 
+<body class="bg-gray-100" >
+    <div class="">
+        <label>{{name.name}}</label>
+        
+        <div class="md:flex md:flex-wrap  md:justify-between  bg-indigo-300 mx-auto h-17">
+            <div class="md:flex md:justify-between font-bold px-2 py-2 text-center text-3xl text-cyan-900 ">
+                <a href="/"><i class="fa fa-lock" aria-hidden="true" aria-setsize="40">
+                </i>&nbsp;SecurePasswordManager</a>
+            </div>
+            <nav class="px-3 py-3 font-medium text-xl">
+            <ul class="flex" >
+                <li class="px-4 cursor-pointer hover:scale-125 hover:text-gray-50"><a href="/">Home</a></li>
+                {% if user.is_authenticated %}
+                <li class="px-4 cursor-pointer hover:scale-125 hover:text-gray-50"><a href="/signout">Logout</a></li>
+                <li class="px-4 cursor-pointer hover:scale-125 hover:text-gray-50"><a href="/add">Add</a></li>
+                {% else %}
+                <li class="px-4 cursor-pointer hover:scale-125 hover:text-gray-50"><a href="/login">Login</a></li>
+                <li class="px-4 cursor-pointer hover:scale-125 hover:text-gray-50"><a href="/signup">Sign Up</a></li>
+                <li class="px-4 cursor-pointer hover:scale-125 hover:text-gray-50"><a href="/admin">Admin</a></li>
+                {% endif %}
+                
+            </ul>
+            </nav>
+           
+        
+          </div> 
+      </div>
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          <strong>Message:</strong> {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+      </div>
+      {% endfor %}
+    
+{% block content %}
+
+{% endblock %}
+           
