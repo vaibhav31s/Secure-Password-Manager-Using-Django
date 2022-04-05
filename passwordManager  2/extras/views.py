@@ -270,67 +270,69 @@ def index(request):
             passwords = Passwords.objects.all().filter(user=request.user)
             for password in passwords:
                 password.email = fernet.decrypt(password.email.encode()).decode()
-                password.password = fernet.decrypt(password.password.encode()).decode()
+                password.password = "***********"
             context = {
                 "passwords":passwords,
             }   
         return render(request,"index.html",context)
-    elif "send" in request.POST:
-            ids = request.POST['password-id']
-            
-           
-            print(ids)
-            userId =Passwords.objects.filter(id=ids).values('user_id')
-            print(userId[0]['user_id'])
-            getEmail = User.objects.filter(id=userId[0]['user_id']).values('email')
-            mobileno = newUser.objects.filter(user_id=userId[0]['user_id']).values('mobile')
-            print(mobileno[0]['mobile'])
-            print(getEmail[0]['email'])
-            mob =mobileno[0]['mobile']
-            
-            # tai = User.objects.values()
-            # print(tai)
-            vaibhav = Passwords.objects.filter(id=ids).values('password','email')
-            my_str = (vaibhav[0]['password'])
-            password = str.encode(my_str)
-            my_str1 =str(mob)
-            my_str2 = (vaibhav[0]['email'])
-            email = str.encode(my_str2)
-          
-            # email = fernet.decrypt(vaibhav.get('email').encode()).decode()
-            ps= fernet.decrypt(password).decode()
-            print(ps)
-            # em = fernet.decrypt(email).decode()
-            
-            # # send_mail(
-            # #     "Password for : ",
-            # #     f"Your UserName is {em} .\n Password is {ps}",
-            # #     settings.EMAIL_HOST_USER,
-            # #     [getEmail[0]['email']],
-            # #     fail_silently=False,
-            # # )
-            
-            account_sid = config('account_sid')
-            auth_token = config('auth_token')
-            client = Client(account_sid, auth_token)
+    if "send" in request.POST:
+        ids = request.POST.get('password-id')
 
-            message = client.messages \
-                            .create(
-                                body= f"Your UserName is {ps} .\n Password is {ps}",
-                                from_='+17069404471',
-                                to='+91'+my_str1
-                            )
+        print(ids)
+        userId =Passwords.objects.filter(id=ids).values('user_id')
+        print(userId[0]['user_id'])
+        getEmail = User.objects.filter(id=userId[0]['user_id']).values('email')
+        mobileno = newUser.objects.filter(user_id=userId[0]['user_id']).values('mobile')
+        print(mobileno[0]['mobile'])
+        print(getEmail[0]['email'])
+        mob =mobileno[0]['mobile']
 
-            print(message.sid)
-            msg =f"Message is Delivered Successful ly"
-            messages.success(request, msg)
+        # tai = User.objects.values()
+        # print(tai)
+        vaibhav = Passwords.objects.filter(id=ids).values('password','email')
+        my_str = (vaibhav[0]['password'])
+        password = str.encode(my_str)
+        my_str1 =str(mob)
+        my_str2 = (vaibhav[0]['email'])
+        email = str.encode(my_str2)
+        
+        # email = fernet.decrypt(vaibhav.get('email').encode()).decode()
+        ps= fernet.decrypt(password).decode()
+        print(ps)
+        em = fernet.decrypt(email).decode()
+        print(em)
+        send_mail(
+            "Password for : ",
+            f"\nThis would be your email : {em}\nPassword is {ps}",
+            settings.EMAIL_HOST_USER,
+            [getEmail[0]['email']],
+            fail_silently=False,
+        )
+        
+        account_sid = config('account_sid')
+        auth_token = config('auth_token')
+        client = Client(account_sid, auth_token)
+
+        message = client.messages \
+                        .create(
+                            body= f"\nThis would be your email : {em}\nPassword is {ps}",
+                            from_='+17069404471',
+                            to='+91'+my_str1
+                        )
+
+        print(message.sid)
+        msg =f"Message is Delivered Successful ly"
+        messages.success(request, msg)
+
 
     context = {}
     if request.user.is_authenticated:
         passwords = Passwords.objects.all().filter(user=request.user)
         for password in passwords:
             password.email = fernet.decrypt(password.email.encode()).decode()
-            password.password = fernet.decrypt(password.password.encode()).decode()
+            password.password = "**************"
+            password.logo = password.logo
+            print(password.logo)
         context = {
             "passwords":passwords,
         }   
@@ -342,12 +344,12 @@ def signup(request):
         email = request.POST['email']
         pass1 = request.POST['password']
         pass2 = request.POST['password2']
-        phone = request.POST['phone']
+        mobile = request.POST['phone']
         print(username)
         print(email)
         print(pass1)
         print(pass2)
-        print(phone)
+        print(mobile)
         if User.objects.filter(username=username):
             messages.error(request,"Username is allready exist!")
             return redirect('/')
@@ -355,14 +357,27 @@ def signup(request):
             messages.error(request,"email is allready exist!")
             return redirect('/')
         if pass1!= pass2:
-            messages.error(request,"Password didnt match")
-        
+            messages.error(request,"Password dint match")
+        else:
+            
+            User.objects.create_user(username, email, pass1)
+            new_user = authenticate(request, username=username, password=pass1)
+            
+            # newextendeduser = newUser(mobile=mobile)
+            
+            if new_user is not None:
+                login(request, new_user)
+                msg = f"{username}. Thanks for subscribing."
+                messages.success(request, msg)
+                newextendeduser =newUser.objects.create(user =new_user,mobile=mobile)
+                newextendeduser.save()
+                return redirect('/')
 
         myuser = User.objects.create_user(username,email,pass1)
         myuser.save()
-        messages.success(request,"Your account has been succesfully created!")
+        messages.success(request,"Your account has been successfully created!")
 
-        return redirect('login')
+        return redirect('/')
         
     return render(request,"sign-up.html",{})
 
@@ -392,6 +407,7 @@ def add(request):
             logo = icon,
             email = encrypted_email.decode(),
             password = encrypted_password.decode(),
+            url = url
                 
         )
         msg = f"{title} Added Successfully"
